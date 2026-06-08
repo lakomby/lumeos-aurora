@@ -5,10 +5,17 @@ on:
 jobs:
   build-iso:
     runs-on: ubuntu-latest
+    # Forçamos o GitHub a rodar tudo DENTRO de um container Fedora
+    container:
+      image: fedora:41
+      options: --privileged
     permissions:
       contents: write
       packages: read
     steps:
+      - name: Install dependencies
+        run: dnf install -y make git
+        
       - name: Build ISO
         uses: ublue-os/isogenerator@main
         with:
