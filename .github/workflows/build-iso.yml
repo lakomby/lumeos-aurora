@@ -1,4 +1,4 @@
-name: Build ISO
+name: Generate ISO
 on:
   workflow_dispatch:
 
@@ -10,11 +10,11 @@ jobs:
       packages: read
     steps:
       - name: Build ISO
-        uses: ublue-os/iso-builder@main
+        uses: ublue-os/isogenerator@main
         with:
           image-ref: ghcr.io/lakomby/lumeos-aurora
           image-tag: latest
-          variant: Kinoite # Como nossa base é o Kinoite
+          variant: Kinoite
           
       - name: Upload ISO to Releases
         uses: softprops/action-gh-release@v2
