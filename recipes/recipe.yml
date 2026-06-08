@@ -16,9 +16,6 @@ modules:
       - kdenlive
       - vlc
       - papirus-icon-theme
-      - steam
-      - lutris
-      - mangohud
     remove:
       - kfind
 
