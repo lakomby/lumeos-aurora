@@ -2,9 +2,9 @@
 name: lumeos-aurora
 description: LumeOS Aurora
 
-# O repositório oficial do Bazzite com KDE para PCs comuns (Desktop/Laptop AMD/Intel)
-base-image: ghcr.io/ublue-os/bazzite-kde
-image-version: stable
+# Caminho oficial direto da infraestrutura da RedHat/Fedora (KDE Imutável)
+base-image: quay.io/fedora/fedora-kinoite
+image-version: "41"
 
 modules:
   - type: files
