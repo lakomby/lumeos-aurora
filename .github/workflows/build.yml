@@ -18,7 +18,7 @@ jobs:
     name: Build Custom Image
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       packages: write
       id-token: write
     strategy:
@@ -30,19 +30,6 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      # 🔐 CONFIGURAÇÃO DE CHAVES USANDO PRINTF (À PROVA DE FALHAS)
-      - name: Configurar Chaves do Cosign
-        run: |
-          rm -f cosign.pub cosign.key
-          
-          # Escreve a chave pública com quebras de linha perfeitas
-          printf "%s\n" "-----BEGIN PUBLIC KEY-----" "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEx0FdNiS2l1kgcRopeEsq8VRgYvtTBk1YQkM67TXxOXwj9u2QWmm/2AQYjgfmuC4CnmMCFLTdeQU7rkeF9S/9yg==" "-----END PUBLIC KEY-----" > cosign.pub
-          
-          # Injeta a chave privada multi-linha no formato exato usando o operando multi-linha do GITHUB_ENV
-          echo "SIGNING_SECRET_AUTO<<EOF" >> $GITHUB_ENV
-          printf "%s\n" "-----BEGIN COSIGN PRIVATE KEY-----" "eyJrZXlEYXRhIjogeyJieXRlcyI6ICJNSUdIQWdFQU1CTUdCeXFHU000OUFnRUdDQ3FHU000OUF3RUhCRzB3YXdJQkFRUWc1M25iU2J3T0lIdlNmR3QxRU9rem9BR3lKUWJwUG4vWVpTdVRDTnl2RWwyaFJBTkNBQVRIUVYwMkpMYVhXU0J4R2lsNFN5cnhWR0JpKzFNR1RWaENRenJ0TmZFNWZDUDI3WkJhYWIvWUJCaU9CK2E0TGdLZVl3SVV0TjE1QlR1dVI0WDFMLzNLIiwgImFsZyI6ICJlY2RzYSJ9LCAicGFzc3dvcmQiOiBudWxsfQ==" "-----END COSIGN PRIVATE KEY-----" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
       - name: Build Custom Image
         uses: blue-build/github-action@v1.11
         with:
@@ -50,4 +37,6 @@ jobs:
           registry_token: ${{ github.token }}
           pr_event_number: ${{ github.event.number }}
           maximize_build_space: true
-          cosign_private_key: ${{ env.SIGNING_SECRET_AUTO }}
+          
+          # 🎯 O TRUQUE: Em vez de ler variáveis do GitHub, manda ler o arquivo físico local
+          cosign_private_key: ./cosign.key
