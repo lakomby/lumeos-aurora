@@ -24,24 +24,11 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      # 🛠️ Instala o Podman (necessário para o BlueBuild compilar a imagem)
-      - name: Instalar Podman
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y podman
-
-      # 📦 Instala a CLI do BlueBuild direto pelo Cargo (sem link quebrado)
-      - name: Instalar BlueBuild CLI
-        run: |
-          cargo install blue-build
-          bluebuild --version
-
-      # 🔑 Faz o login no registro do GitHub (GHCR) para poder enviar a imagem depois
-      - name: Logar no GitHub Packages
-        run: |
-          echo "${{ github.token }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      # 🚀 Roda o build direto no terminal SEM ASSINATURA e SEM CHATICE
-      - name: Build da Imagem
-        run: |
-          bluebuild build --no-sign ./recipes/recipe.yml
+      - name: Build and Push Image
+        uses: blue-build/github-action@v1.8
+        with:
+          # Aponta pro caminho real que apareceu no seu print
+          recipe: config/recipe.yml
+          # Usa o token invisível do GitHub para autorizar o envio
+          registry_token: ${{ github.token }}
+          maximize_build_space: true
