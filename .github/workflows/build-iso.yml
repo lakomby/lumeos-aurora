@@ -1,7 +1,7 @@
 name: Build LumeOS ISO
 
 on:
-  workflow_dispatch: # Permite rodar o script manualmente clicando no botão
+  workflow_dispatch:
 
 jobs:
   build-iso:
@@ -22,13 +22,14 @@ jobs:
       - name: Puxar a imagem do LumeOS
         run: sudo podman pull ghcr.io/lakomby/lumeos-aurora:latest
 
-      - name: Rodar Bootc Image Builder para gerar a ISO
+      - name: Rodar Bootc Image Builder com rootfs definido
         run: |
           sudo podman run --rm --privileged \
             -v /var/lib/containers/storage:/var/lib/containers/storage \
             -v ${{ github.workspace }}/output:/output \
             quay.io/centos-bootc/bootc-image-builder:latest \
             --type iso \
+            --rootfs xfs \
             ghcr.io/lakomby/lumeos-aurora:latest
 
       - name: Upload da ISO para Download
