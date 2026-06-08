@@ -32,7 +32,6 @@ mkdir -p /etc/skel/Desktop/
 # ==========================================
 BASE_URL="https://update.lumeos.com.br/images"
 
-# Função interna para baixar sem capotar o script se o servidor oscilar
 baixar_arquivo() {
     curl -fsSL "$1" -o "$2" || echo "Aviso: Nao foi possivel baixar $1"
 }
@@ -97,8 +96,8 @@ touch /usr/share/plasma/look-and-feel/org.lumeos.aurora/contents/layouts/main.xm
 # ==========================================
 # 6. SCRIPT DE AUTOMAÇÃO DE PRIMEIRO BOOT (FLATPAKS)
 # ==========================================
-mkdir -p /usr/etc/profile.d/
-cat << 'EOF' > /usr/etc/profile.d/lumeos-firstboot.sh
+mkdir -p /etc/profile.d/
+cat << 'EOF' > /etc/profile.d/lumeos-firstboot.sh
 #!/bin/bash
 if [ ! -f ~/.config/lumeos-setup-done ]; then
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
@@ -123,4 +122,4 @@ if [ ! -f ~/.config/lumeos-setup-done ]; then
     touch ~/.config/lumeos-setup-done
 fi
 EOF
-chmod +x /usr/etc/profile.d/lumeos-firstboot.sh
+chmod +x /etc/profile.d/lumeos-firstboot.sh
