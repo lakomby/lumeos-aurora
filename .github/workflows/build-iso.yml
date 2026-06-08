@@ -22,10 +22,10 @@ jobs:
       - name: Puxar a imagem do LumeOS
         run: sudo podman pull ghcr.io/lakomby/lumeos-aurora:latest
 
-      - name: Tag local para evitar erro de distro
+      - name: Tag local
         run: sudo podman tag ghcr.io/lakomby/lumeos-aurora:latest localhost/lumeos-aurora:latest
 
-      - name: Rodar Bootc Image Builder (Força Bruta Local)
+      - name: Rodar Bootc Image Builder (Comando Simplificado)
         run: |
           sudo podman run --rm --privileged \
             -v /var/lib/containers/storage:/var/lib/containers/storage \
@@ -33,7 +33,6 @@ jobs:
             quay.io/centos-bootc/bootc-image-builder:latest \
             --type iso \
             --rootfs xfs \
-            --target-no-signature-verification \
             localhost/lumeos-aurora:latest
 
       - name: Upload da ISO para Download
