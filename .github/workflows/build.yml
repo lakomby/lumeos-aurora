@@ -35,6 +35,5 @@ jobs:
           pr_event_number: ${{ github.event.number }}
           maximize_build_space: true
 
-          # 🛑 COMBINAÇÃO DEFINITIVA PARA ARRANCAR A ASSINATURA:
-          cosign_private_key: ""
-          is_as_ga: false
+          # 🔑 O XEQUE-MATE: Passa o argumento direto pro container do BlueBuild ignorar a assinatura
+          cli_args: "--no-sign"
