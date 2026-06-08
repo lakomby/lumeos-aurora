@@ -27,8 +27,6 @@ jobs:
       - name: Build and Push Image
         uses: blue-build/github-action@v1.8
         with:
-          # Aponta pro caminho real que apareceu no seu print
           recipe: config/recipe.yml
-          # Usa o token invisível do GitHub para autorizar o envio
           registry_token: ${{ github.token }}
           maximize_build_space: true
