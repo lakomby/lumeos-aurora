@@ -10,12 +10,21 @@ on:
 jobs:
   build-iso:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
 
       - name: Criar pasta de saída
         run: mkdir -p ${{ github.workspace }}/output
+
+      - name: Login no GHCR (Garante que não vai dar erro de acesso)
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | sudo podman login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Puxar a imagem do LumeOS (Obrigatório agora)
+        run: sudo podman pull ghcr.io/lakomby/lumeos-aurora:26
 
       - name: Rodar Bootc Image Builder
         run: |
