@@ -30,31 +30,18 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      # 🔐 AGORA VAI: Injeta o par oficial gerado pelo algoritmo do Cosign
-      - name: Configurar Chaves Emparelhadas
+      # 🔐 CONFIGURAÇÃO DE CHAVES EM LINHA ÚNICA (ZERO ERROS DE SINTAXE)
+      - name: Configurar Chaves do Cosign
         run: |
           rm -f cosign.pub cosign.key
           
-          # 1. Cria a chave pública legítima na raiz do build
-          cat << 'EOF' > cosign.pub
------BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEx0FdNiS2l1kgcRopeEsq8VRgYvtT
-Bk1YQkM67TXxOXwj9u2QWmm/2AQYjgfmuC4CnmMCFLTdeQU7rkeF9S/9yg==
------END PUBLIC KEY-----
-EOF
-
-          # 2. Injeta a chave privada correspondente exata no formato COSIGN
-          echo "SIGNING_SECRET_AUTO<<EOF" >> $GITHUB_ENV
-          cat << 'EOF' >> $GITHUB_ENV
------BEGIN COSIGN PRIVATE KEY-----
-eyJrZXlEYXRhIjogeyJieXRlcyI6ICJNSUdIQWdFQU1CTUdCeXFHU000OUFnRUdD
-Q3FHU000OUF3RUhCRzB3YXdJQkFRUWc1M25iU2J3T0lIdlNmR3QxRU9rem9BR3lK
-UWJwUG4vWVpTdVRDTnl2RWwyaFJBTkNBQVRIUVYwMkpMYVhXU0J4R2lsNFN5cnhW
-R0JpKzFNR1RWaENRenJ0TmZFNWZDUDI3WkJhYWIvWUJCaU9CK2E0TGdLZVl3SVV0
-TjE1QlR1dVI0WDFMLzNLIiwgImFsZyI6ICJlY2RzYSJ9LCAicGFzc3dvcmQiOiBu
-dWxsfQ==
------END COSIGN PRIVATE KEY-----
-EOF
+          # Escreve a chave pública direto no arquivo em uma única linha limpa
+          echo "-----BEGIN PUBLIC KEY-----" > cosign.pub
+          echo "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEx0FdNiS2l1kgcRopeEsq8VRgYvtTBk1YQkM67TXxOXwj9u2QWmm/2AQYjgfmuC4CnmMCFLTdeQU7rkeF9S/9yg==" >> cosign.pub
+          echo "-----END PUBLIC KEY-----" >> cosign.pub
+          
+          # Injeta a chave privada direto no ambiente em uma linha contínua perfeita
+          echo "SIGNING_SECRET_AUTO=-----BEGIN COSIGN PRIVATE KEY-----eyJrZXlEYXRhIjogeyJieXRlcyI6ICJNSUdIQWdFQU1CTUdCeXFHU000OUFnRUdDQ3FHU000OUF3RUhCRzB3YXdJQkFRUWc1M25iU2J3T0lIdlNmR3QxRU9rem9BR3lKUWJwUG4vWVpTdVRDTnl2RWwyaFJBTkNBQVRIUVYwMkpMYVhXU0J4R2lsNFN5cnhWR0JpKzFNR1RWaENRenJ0TmZFNWZDUDI3WkJhYWIvWUJCaU9CK2E0TGdLZVl3SVV0TjE1QlR1dVI0WDFMLzNLIiwgImFsZyI6ICJlY2RzYSJ9LCAicGFzc3dvcmQiOiBudWxsfQ==-----END COSIGN PRIVATE KEY-----" >> $GITHUB_ENV
 
       - name: Build Custom Image
         uses: blue-build/github-action@v1.11
@@ -63,6 +50,4 @@ EOF
           registry_token: ${{ github.token }}
           pr_event_number: ${{ github.event.number }}
           maximize_build_space: true
-          
-          # Passa a chave privada que casa 100% com o arquivo público acima
           cosign_private_key: ${{ env.SIGNING_SECRET_AUTO }}
