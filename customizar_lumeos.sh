@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -e
 
 # ==========================================
 # 1. ALTERAR AS INFORMAÇÕES DO SISTEMA (ENTRANHAS)
@@ -29,34 +28,39 @@ mkdir -p /usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/
 mkdir -p /etc/skel/Desktop/
 
 # ==========================================
-# 3. DOWNLOADS DOS LOGOS E WALLPAPERS DO SEU SERVIDOR
+# 3. DOWNLOADS DOS LOGOS E WALLPAPERS
 # ==========================================
 BASE_URL="https://update.lumeos.com.br/images"
 
-curl -fsSL "${BASE_URL}/wpp03.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/1920x1080.jpg
-curl -fsSL "${BASE_URL}/wpp01.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp01.jpg
-curl -fsSL "${BASE_URL}/wpp02.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp02.jpg
-curl -fsSL "${BASE_URL}/wpp04.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp04.jpg
-curl -fsSL "${BASE_URL}/wpp05.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp05.jpg
-curl -fsSL "${BASE_URL}/wpp06.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp06.jpg
-curl -fsSL "${BASE_URL}/wpp07.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp07.jpg
-curl -fsSL "${BASE_URL}/wpp08.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp08.jpg
-curl -fsSL "${BASE_URL}/wpp09.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp09.jpg
-curl -fsSL "${BASE_URL}/wpp10.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp10.jpg
-curl -fsSL "${BASE_URL}/wpp11.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp11.jpg
-curl -fsSL "${BASE_URL}/wpp12.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp12.jpg
-curl -fsSL "${BASE_URL}/wpp13.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp13.jpg
-curl -fsSL "${BASE_URL}/wpp14.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp14.jpg
-curl -fsSL "${BASE_URL}/wpp15.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp15.jpg
-curl -fsSL "${BASE_URL}/wpp17.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp17.jpg
-curl -fsSL "${BASE_URL}/wpp18.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp18.jpg
-curl -fsSL "${BASE_URL}/wpp19.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp19.jpg
-curl -fsSL "${BASE_URL}/wpp20.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp20.jpg
+# Função interna para baixar sem capotar o script se o servidor oscilar
+baixar_arquivo() {
+    curl -fsSL "$1" -o "$2" || echo "Aviso: Nao foi possivel baixar $1"
+}
 
-curl -fsSL "${BASE_URL}/Logo01.png" -o /usr/share/plasma/look-and-feel/org.lumeos.aurora/contents/preview.png
-curl -fsSL "${BASE_URL}/icn01.png" -o /usr/share/pixmaps/lumeos-logos/logo_menu.png
-curl -fsSL "${BASE_URL}/icn02.png" -o /usr/share/pixmaps/lumeos-logos/logo_boot.png
-curl -fsSL "${BASE_URL}/lg02.png"  -o /usr/share/pixmaps/lumeos-logos/logo_sistema.png
+baixar_arquivo "${BASE_URL}/wpp03.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/1920x1080.jpg
+baixar_arquivo "${BASE_URL}/wpp01.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp01.jpg
+baixar_arquivo "${BASE_URL}/wpp02.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp02.jpg
+baixar_arquivo "${BASE_URL}/wpp04.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp04.jpg
+baixar_arquivo "${BASE_URL}/wpp05.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp05.jpg
+baixar_arquivo "${BASE_URL}/wpp06.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp06.jpg
+baixar_arquivo "${BASE_URL}/wpp07.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp07.jpg
+baixar_arquivo "${BASE_URL}/wpp08.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp08.jpg
+baixar_arquivo "${BASE_URL}/wpp09.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp09.jpg
+baixar_arquivo "${BASE_URL}/wpp10.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp10.jpg
+baixar_arquivo "${BASE_URL}/wpp11.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp11.jpg
+baixar_arquivo "${BASE_URL}/wpp12.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp12.jpg
+baixar_arquivo "${BASE_URL}/wpp13.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp13.jpg
+baixar_arquivo "${BASE_URL}/wpp14.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp14.jpg
+baixar_arquivo "${BASE_URL}/wpp15.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp15.jpg
+baixar_arquivo "${BASE_URL}/wpp17.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp17.jpg
+baixar_arquivo "${BASE_URL}/wpp18.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp18.jpg
+baixar_arquivo "${BASE_URL}/wpp19.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp19.jpg
+baixar_arquivo "${BASE_URL}/wpp20.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp20.jpg
+
+baixar_arquivo "${BASE_URL}/Logo01.png" /usr/share/plasma/look-and-feel/org.lumeos.aurora/contents/preview.png
+baixar_arquivo "${BASE_URL}/icn01.png" /usr/share/pixmaps/lumeos-logos/logo_menu.png
+baixar_arquivo "${BASE_URL}/icn02.png" /usr/share/pixmaps/lumeos-logos/logo_boot.png
+baixar_arquivo "${BASE_URL}/lg02.png"  /usr/share/pixmaps/lumeos-logos/logo_sistema.png
 
 # ==========================================
 # 4. INJETAR O LOGO DO LUMEOS NO MENU INICIAR
@@ -91,7 +95,7 @@ EOF
 touch /usr/share/plasma/look-and-feel/org.lumeos.aurora/contents/layouts/main.xml
 
 # ==========================================
-# 6. ENFIAR OS ATALHOS NA ÁREA DE TRABALHO DE FÁBRICA (FLATPAKS)
+# 6. SCRIPT DE AUTOMAÇÃO DE PRIMEIRO BOOT (FLATPAKS)
 # ==========================================
 mkdir -p /usr/etc/profile.d/
 cat << 'EOF' > /usr/etc/profile.d/lumeos-firstboot.sh
