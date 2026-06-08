@@ -22,7 +22,7 @@ jobs:
       - name: Puxar a imagem do LumeOS
         run: sudo podman pull ghcr.io/lakomby/lumeos-aurora:latest
 
-      - name: Rodar Bootc Image Builder com rootfs definido
+      - name: Rodar Bootc Image Builder (Configuração Padrão Fedora)
         run: |
           sudo podman run --rm --privileged \
             -v /var/lib/containers/storage:/var/lib/containers/storage \
