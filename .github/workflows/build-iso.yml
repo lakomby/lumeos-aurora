@@ -23,8 +23,8 @@ jobs:
       - name: Login no GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | sudo podman login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Puxar a imagem do LumeOS pelo SHA exato
-        run: sudo podman pull ghcr.io/lakomby/lumeos-aurora@sha256:7210e302be8d1d2b7bd5e1b2bf8b97d190b26f58bb7928b08709a3416298516fb
+      - name: Puxar a imagem do LumeOS
+        run: sudo podman pull COLE_O_LINK_EXATO_AQUI
 
       - name: Rodar Bootc Image Builder
         run: |
@@ -33,7 +33,7 @@ jobs:
             -v ${{ github.workspace }}/output:/output \
             quay.io/centos-bootc/bootc-image-builder:latest \
             --type iso \
-            ghcr.io/lakomby/lumeos-aurora@sha256:7210e302be8d1d2b7bd5e1b2bf8b97d190b26f58bb7928b08709a3416298516fb
+            COLE_O_LINK_EXATO_AQUI
 
       - name: Upload da ISO como Artefato
         uses: actions/upload-artifact@v4
