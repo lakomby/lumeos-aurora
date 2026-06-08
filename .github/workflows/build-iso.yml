@@ -20,6 +20,7 @@ jobs:
       - name: Rodar Bootc Image Builder
         run: |
           sudo podman run --rm --privileged \
+            -v /var/lib/containers/storage:/var/lib/containers/storage \
             -v ${{ github.workspace }}/output:/output \
             quay.io/centos-bootc/bootc-image-builder:latest \
             --type iso \
