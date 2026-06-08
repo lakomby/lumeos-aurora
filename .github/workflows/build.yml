@@ -2,12 +2,12 @@ name: bluebuild
 on:
   schedule:
     - cron:
-        "00 06 * * *" # build at 06:00 UTC every day
+        "00 06 * * *"
   push:
     paths-ignore:
       - "**.md"
   pull_request:
-  workflow_dispatch: # allow manually triggering builds
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
@@ -34,7 +34,7 @@ jobs:
           registry_token: ${{ github.token }}
           pr_event_number: ${{ github.event.number }}
           maximize_build_space: true
-          
-          # 🚫 ESTAS DUAS LINHAS DESATIVAM A EXIGÊNCIA DE ASSINATURA CRIPTOGRÁFICA
-          cli_flags: "--no-sign"
+
+          # 🛑 COMBINAÇÃO DEFINITIVA PARA ARRANCAR A ASSINATURA:
+          cosign_private_key: ""
           is_as_ga: false
