@@ -17,10 +17,12 @@ jobs:
       - name: Criar pasta de saída
         run: mkdir -p ${{ github.workspace }}/output
 
-      - name: Compilar a imagem do LumeOS na hora
+      - name: Compilar a imagem do LumeOS localmente
+        # ATENÇÃO: Este passo exige que o arquivo "Containerfile" ou "Dockerfile" 
+        # esteja na raiz do seu repositório no GitHub. Se não estiver, vai falhar.
         run: sudo podman build -t localhost/lumeos-aurora:latest .
 
-      - name: Rodar Bootc Image Builder (Usando a imagem recém-criada)
+      - name: Rodar Bootc Image Builder (Gerar ISO)
         run: |
           sudo podman run --rm --privileged \
             -v /var/lib/containers/storage:/var/lib/containers/storage \
