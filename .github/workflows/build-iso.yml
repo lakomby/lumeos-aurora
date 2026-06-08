@@ -9,12 +9,16 @@ jobs:
       contents: write
       packages: read
     steps:
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y make
+        
       - name: Build ISO
         uses: ublue-os/isogenerator@main
         with:
-          image-ref: ghcr.io/lakomby/lumeos-aurora
-          image-tag: latest
-          variant: Kinoite
+          IMAGE_REPO: "ghcr.io/lakomby"
+          IMAGE_NAME: "lumeos-aurora"
+          IMAGE_TAG: "latest"
+          VARIANT: "Kinoite"
           
       - name: Upload ISO to Releases
         uses: softprops/action-gh-release@v2
