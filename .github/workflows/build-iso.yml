@@ -10,9 +10,6 @@ on:
 jobs:
   build-iso:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: read
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
@@ -20,20 +17,18 @@ jobs:
       - name: Criar pasta de saída
         run: mkdir -p ${{ github.workspace }}/output
 
-      - name: Login no GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | sudo podman login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Compilar a imagem do LumeOS na hora
+        run: sudo podman build -t localhost/lumeos-aurora:latest .
 
-      - name: Puxar a imagem do LumeOS
-        run: sudo podman pull COLE_O_LINK_EXATO_AQUI
-
-      - name: Rodar Bootc Image Builder
+      - name: Rodar Bootc Image Builder (Usando a imagem recém-criada)
         run: |
           sudo podman run --rm --privileged \
             -v /var/lib/containers/storage:/var/lib/containers/storage \
             -v ${{ github.workspace }}/output:/output \
             quay.io/centos-bootc/bootc-image-builder:latest \
             --type iso \
-            COLE_O_LINK_EXATO_AQUI
+            --local \
+            localhost/lumeos-aurora:latest
 
       - name: Upload da ISO como Artefato
         uses: actions/upload-artifact@v4
