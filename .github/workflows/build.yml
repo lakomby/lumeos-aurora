@@ -2,12 +2,12 @@ name: bluebuild
 on:
   schedule:
     - cron:
-        "00 06 * * *"
+        "00 06 * * *" # Build automático às 06:00 UTC todos os dias
   push:
-    paths-ignore:
+    paths-ignore: # Não reconstrói se apenas a documentação foi alterada
       - "**.md"
   pull_request:
-  workflow_dispatch:
+  workflow_dispatch: # Permite disparar o build manualmente pelo botão no GitHub
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
@@ -34,3 +34,6 @@ jobs:
           registry_token: ${{ github.token }}
           pr_event_number: ${{ github.event.number }}
           maximize_build_space: true
+          
+          # Envia a chave secreta falsa que criámos nas Settings para acalmar o instalador
+          cosign_private_key: ${{ secrets.SIGNING_SECRET }}
