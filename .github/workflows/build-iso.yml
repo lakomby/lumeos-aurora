@@ -1,0 +1,25 @@
+name: Build ISO
+on:
+  workflow_dispatch:
+
+jobs:
+  build-iso:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: read
+    steps:
+      - name: Build ISO
+        uses: ublue-os/iso-builder@main
+        with:
+          image-ref: ghcr.io/lakomby/lumeos-aurora
+          image-tag: latest
+          variant: Kinoite # Como nossa base é o Kinoite
+          
+      - name: Upload ISO to Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            *.iso
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
