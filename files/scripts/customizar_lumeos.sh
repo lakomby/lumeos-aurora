@@ -28,7 +28,7 @@ mkdir -p /usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/
 mkdir -p /etc/skel/Desktop/
 
 # ==========================================
-# 3. DOWNLOADS DOS LOGOS E WALLPAPERS
+# 3. DOWNLOADS DOS LOGOS E WALLPAPERS (CORRIGIDO PARA .PNG)
 # ==========================================
 BASE_URL="https://update.lumeos.com.br/images"
 
@@ -36,26 +36,30 @@ baixar_arquivo() {
     curl -fsSL "$1" -o "$2" || echo "Aviso: Nao foi possivel baixar $1"
 }
 
-baixar_arquivo "${BASE_URL}/wpp03.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/1920x1080.jpg
-baixar_arquivo "${BASE_URL}/wpp01.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp01.jpg
-baixar_arquivo "${BASE_URL}/wpp02.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp02.jpg
-baixar_arquivo "${BASE_URL}/wpp04.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp04.jpg
-baixar_arquivo "${BASE_URL}/wpp05.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp05.jpg
-baixar_arquivo "${BASE_URL}/wpp06.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp06.jpg
-baixar_arquivo "${BASE_URL}/wpp07.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp07.jpg
-baixar_arquivo "${BASE_URL}/wpp08.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp08.jpg
-baixar_arquivo "${BASE_URL}/wpp09.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp09.jpg
-baixar_arquivo "${BASE_URL}/wpp10.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp10.jpg
-baixar_arquivo "${BASE_URL}/wpp11.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp11.jpg
-baixar_arquivo "${BASE_URL}/wpp12.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp12.jpg
-baixar_arquivo "${BASE_URL}/wpp13.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp13.jpg
-baixar_arquivo "${BASE_URL}/wpp14.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp14.jpg
-baixar_arquivo "${BASE_URL}/wpp15.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp15.jpg
-baixar_arquivo "${BASE_URL}/wpp17.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp17.jpg
-baixar_arquivo "${BASE_URL}/wpp18.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp18.jpg
-baixar_arquivo "${BASE_URL}/wpp19.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp19.jpg
-baixar_arquivo "${BASE_URL}/wpp20.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp20.jpg
+# Buscando wpp03.png no servidor e salvando como o JPG padrao que o KDE espera
+baixar_arquivo "${BASE_URL}/wpp03.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/1920x1080.jpg
 
+# Baixando o resto da galeria (.png do servidor salvando como .png no sistema)
+baixar_arquivo "${BASE_URL}/wpp01.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp01.png
+baixar_arquivo "${BASE_URL}/wpp02.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp02.png
+baixar_arquivo "${BASE_URL}/wpp04.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp04.png
+baixar_arquivo "${BASE_URL}/wpp05.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp05.png
+baixar_arquivo "${BASE_URL}/wpp06.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp06.png
+baixar_arquivo "${BASE_URL}/wpp07.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp07.png
+baixar_arquivo "${BASE_URL}/wpp08.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp08.png
+baixar_arquivo "${BASE_URL}/wpp09.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp09.png
+baixar_arquivo "${BASE_URL}/wpp10.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp10.png
+baixar_arquivo "${BASE_URL}/wpp11.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp11.png
+baixar_arquivo "${BASE_URL}/wpp12.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp12.png
+baixar_arquivo "${BASE_URL}/wpp13.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp13.png
+baixar_arquivo "${BASE_URL}/wpp14.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp14.png
+baixar_arquivo "${BASE_URL}/wpp15.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp15.png
+baixar_arquivo "${BASE_URL}/wpp17.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp17.png
+baixar_arquivo "${BASE_URL}/wpp18.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp18.png
+baixar_arquivo "${BASE_URL}/wpp19.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp19.png
+baixar_arquivo "${BASE_URL}/wpp20.png" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp20.png
+
+# Logos (Garantindo que puxa com a caixa alta exata se houver)
 baixar_arquivo "${BASE_URL}/Logo01.png" /usr/share/plasma/look-and-feel/org.lumeos.aurora/contents/preview.png
 baixar_arquivo "${BASE_URL}/icn01.png" /usr/share/pixmaps/lumeos-logos/logo_menu.png
 baixar_arquivo "${BASE_URL}/icn02.png" /usr/share/pixmaps/lumeos-logos/logo_boot.png
