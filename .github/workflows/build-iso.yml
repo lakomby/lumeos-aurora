@@ -1,35 +1,16 @@
-name: Generate ISO
-on:
-  workflow_dispatch:
+- name: Build ISO via Bootc Image Builder
+        run: |
+          mkdir -p output
+          docker run --rm --privileged \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v $(pwd)/output:/output \
+            -w /output \
+            quay.io/centos-bootc/bootc-image-builder:latest \
+            --type iso \
+            ghcr.io/${{ github.repository_owner }}/lumeos-aurora:26
 
-jobs:
-  build-iso:
-    runs-on: ubuntu-latest
-    container:
-      image: fedora:41
-      options: --privileged
-    permissions:
-      contents: write
-      packages: read
-    steps:
-      - name: Install dependencies
-        run: dnf install -y make git
-        
-      - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Build ISO
-        uses: ublue-os/isogenerator@main
+      - name: Upload ISO Artifact
+        uses: actions/upload-artifact@v4
         with:
-          IMAGE_REPO: "ghcr.io/lakomby"
-          IMAGE_NAME: "lumeos-aurora"
-          IMAGE_TAG: "latest"
-          VARIANT: "Kinoite"
-          
-      - name: Upload ISO to Releases
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            *.iso
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: LumeOS-Aurora-ISO
+          path: output/bootiso/install.iso
