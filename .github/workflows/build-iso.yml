@@ -1,16 +1,13 @@
 - name: Build ISO via Bootc Image Builder
-        run: |
-          mkdir -p output
-          docker run --rm --privileged \
-            -v /var/run/docker.sock:/var/run/docker.sock \
-            -v $(pwd)/output:/output \
-            -w /output \
-            quay.io/centos-bootc/bootc-image-builder:latest \
-            --type iso \
-            ghcr.io/${{ github.repository_owner }}/lumeos-aurora:26
+        uses: osbuild/bootc-image-builder-action@v1
+        with:
+          image: ghcr.io/${{ github.repository_owner }}/lumeos-aurora:26
+          type: iso
 
       - name: Upload ISO Artifact
         uses: actions/upload-artifact@v4
         with:
           name: LumeOS-Aurora-ISO
-          path: output/bootiso/install.iso
+          path: |
+            ./output/bootiso/install.iso
+            ./output/image/image.iso
