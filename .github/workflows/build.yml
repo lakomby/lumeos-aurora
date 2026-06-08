@@ -24,9 +24,11 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      - name: Build and Push Image
-        uses: blue-build/github-action@v1.8
-        with:
-          recipe: config/recipe.yml
-          registry_token: ${{ github.token }}
-          maximize_build_space: true
+      - name: Instalar BlueBuild CLI
+        run: cargo install blue-build
+
+      - name: Logar no GitHub Packages
+        run: echo "${{ github.token }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build e Push da Imagem (Força Bruta sem Assinatura)
+        run: bluebuild build --push --no-sign config/recipe.yml
