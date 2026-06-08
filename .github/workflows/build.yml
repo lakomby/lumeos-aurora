@@ -1,8 +1,7 @@
 name: bluebuild
 on:
   schedule:
-    - cron:
-        "00 06 * * *"
+    - cron: "00 06 * * *"
   push:
     paths-ignore:
       - "**.md"
@@ -30,21 +29,13 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      # 🪄 TRUQUE DE MESTRE: Injeta a chave em Base64 puro para o Linux montar o bloco PEM original em memória
-      - name: Reconstruir PEM Original
-        run: |
-          # Uma única linha contínua em Base64 que contém o arquivo key inteiro com quebras de linha perfeitas
-          B64_KEY="LS0tLS1CRUdJTiBDT1NJR04gUFJJVkFURSBLRVktLS0tLQpleUpyWlhoRFlYUmFJam9nZXlKallYUmxjeUk2SUNKTlNVRkhRVmRGUVVGTVFVMURVMGw0UVVkR00wbEZWMVJVUzFOYgpRMTVYUlZoR1YwMHdaWEpRY0ZjMU0yNWlhVkp4VDA4SklIdmZZbVIxUlU5cmVtNUJVM2xLVVdKd1VHNXVMMVpaYzVSRApVM05sVmxSRVRsTjVWMHhOWm1WRk5XWkRVRFF5TmtwYmFXSXZXVUpDYWw5RE9XRXRMbWRSVjZkS05VRjFWRDFNTVZSVwpSMEp5ZW5KMERtWkZOV1pEUDI3V1pXSmhZV2l2V1VKQ2FVOU9SazVNWjBGWVpYcHpkMDFvU21WM09VbHRRalZDVmRWeQpSRE5NTVMwek5DaXdaVzVyY3lJNklDOWxZM1J6WVMValidMQ0FpY0dGemMzZHZjbVFpT2lCdWRXeHNmUT09Ci0tLS0tRU5EIENPU0lHTiBQUklWQVRFIEtFWS0tLS0tC"
-          
-          echo "SIGNING_SECRET_AUTO<<EOF" >> $GITHUB_ENV
-          echo "$B64_KEY" | base64 -d >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
       - name: Build Custom Image
-        uses: blue-build/github-action@v1.11
+        uses: blue-build/github-action@v1.12
         with:
           recipe: ${{ matrix.recipe }}
           registry_token: ${{ github.token }}
           pr_event_number: ${{ github.event.number }}
           maximize_build_space: true
-          cosign_private_key: ${{ env.SIGNING_SECRET_AUTO }}
+          
+          # 🛑 A SOLUÇÃO COMPLETA: Desativa o motor do Cosign nativamente
+          disable_signing: true
