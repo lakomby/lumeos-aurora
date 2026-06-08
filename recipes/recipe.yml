@@ -21,7 +21,6 @@ modules:
       - mangohud
     remove:
       - kfind
-      - libreoffice-core
 
   - type: script
     scripts:
