@@ -30,11 +30,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y podman
 
-      # 📦 Baixa o binário do BlueBuild direto do GitHub deles
+      # 📦 Instala a CLI do BlueBuild direto pelo Cargo (sem link quebrado)
       - name: Instalar BlueBuild CLI
         run: |
-          curl -fsSL https://github.com/blue-build/cli/releases/latest/download/bluebuild-x86_64-unknown-linux-gnu.tar.gz | tar -xz
-          sudo mv bluebuild /usr/bin/
+          cargo install blue-build
           bluebuild --version
 
       # 🔑 Faz o login no registro do GitHub (GHCR) para poder enviar a imagem depois
