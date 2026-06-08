@@ -34,6 +34,3 @@ jobs:
           registry_token: ${{ github.token }}
           pr_event_number: ${{ github.event.number }}
           maximize_build_space: true
-
-          # 🔨 AGORA SIM: O nome exato aceito por essa versão da Action para engolir as flags
-          cli_arguments: "--no-sign"
