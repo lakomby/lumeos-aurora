@@ -20,22 +20,29 @@ jobs:
       contents: read
       packages: write
       id-token: write
-    strategy:
-      fail-fast: false
-      matrix:
-        recipe:
-          - recipe.yml
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      - name: Build Custom Image
-        uses: blue-build/github-action@v1.12
-        with:
-          recipe: ${{ matrix.recipe }}
-          registry_token: ${{ github.token }}
-          pr_event_number: ${{ github.event.number }}
-          maximize_build_space: true
-          
-          # 🛑 A SOLUÇÃO COMPLETA: Desativa o motor do Cosign nativamente
-          disable_signing: true
+      # 🛠️ Instala o Podman (necessário para o BlueBuild compilar a imagem)
+      - name: Instalar Podman
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y podman
+
+      # 📦 Baixa o binário do BlueBuild direto do GitHub deles
+      - name: Instalar BlueBuild CLI
+        run: |
+          curl -fsSL https://github.com/blue-build/cli/releases/latest/download/bluebuild-x86_64-unknown-linux-gnu.tar.gz | tar -xz
+          sudo mv bluebuild /usr/bin/
+          bluebuild --version
+
+      # 🔑 Faz o login no registro do GitHub (GHCR) para poder enviar a imagem depois
+      - name: Logar no GitHub Packages
+        run: |
+          echo "${{ github.token }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # 🚀 Roda o build direto no terminal SEM ASSINATURA e SEM CHATICE
+      - name: Build da Imagem
+        run: |
+          bluebuild build --no-sign ./recipes/recipe.yml
