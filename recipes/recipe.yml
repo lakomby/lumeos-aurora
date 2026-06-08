@@ -5,9 +5,6 @@ description: LumeOS Aurora
 base-image: ghcr.io/ublue-os/bazzite-kde
 image-version: latest
 
-branding:
-  website: "https://lumeos.org"
-
 modules:
   - type: files
     files:
