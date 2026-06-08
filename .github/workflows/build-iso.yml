@@ -22,14 +22,20 @@ jobs:
       - name: Puxar a imagem do LumeOS
         run: sudo podman pull ghcr.io/lakomby/lumeos-aurora:latest
 
-      - name: Rodar Bootc Image Builder (Configuração Padrão Fedora)
+      - name: Criar arquivo de configuração da distro
+        run: |
+          echo '{"distro": "fedora"}' > config.json
+
+      - name: Rodar Bootc Image Builder com configuração forçada
         run: |
           sudo podman run --rm --privileged \
             -v /var/lib/containers/storage:/var/lib/containers/storage \
             -v ${{ github.workspace }}/output:/output \
+            -v ${{ github.workspace }}/config.json:/config.json \
             quay.io/centos-bootc/bootc-image-builder:latest \
             --type iso \
             --rootfs xfs \
+            --config /config.json \
             ghcr.io/lakomby/lumeos-aurora:latest
 
       - name: Upload da ISO para Download
