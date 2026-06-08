@@ -3,7 +3,8 @@ name: lumeos-aurora
 description: LumeOS Aurora
 
 base-image: ghcr.io/ublue-os/bazzite-kde
-image-version: latest
+# 🎯 A MUDANÇA ESSENCIAL: Troca 'latest' por 'stable'
+image-version: stable
 
 modules:
   - type: files
