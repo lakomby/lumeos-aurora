@@ -59,7 +59,7 @@ curl -fsSL "${BASE_URL}/icn02.png" -o /usr/share/pixmaps/lumeos-logos/logo_boot.
 curl -fsSL "${BASE_URL}/lg02.png"  -o /usr/share/pixmaps/lumeos-logos/logo_sistema.png
 
 # ==========================================
-# 4. INJETAR A ESTRELA DO LUMEOS NO MENU INICIAR
+# 4. INJETAR O LOGO DO LUMEOS NO MENU INICIAR
 # ==========================================
 cat << 'EOF' > /usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/lumeos_menu_icon.js
 var desktops = desktops();
@@ -91,25 +91,31 @@ EOF
 touch /usr/share/plasma/look-and-feel/org.lumeos.aurora/contents/layouts/main.xml
 
 # ==========================================
-# 6. ENFIAR OS ATALHOS NA ÁREA DE TRABALHO DE FÁBRICA
-# ==========================================
-cp /var/lib/flatpak/exports/share/applications/com.google.Chrome.desktop /etc/skel/Desktop/ 2>/dev/null || true
-cp /var/lib/flatpak/exports/share/applications/com.google.EarthPro.desktop /etc/skel/Desktop/ 2>/dev/null || true
-cp /var/lib/flatpak/exports/share/applications/com.spotify.Client.desktop /etc/skel/Desktop/ 2>/dev/null || true
-cp /var/lib/flatpak/exports/share/applications/org.onlyoffice.desktopeditors.desktop /etc/skel/Desktop/ 2>/dev/null || true
-
-# ==========================================
-# 7. SCRIPT DE AUTOMAÇÃO DE PRIMEIRO BOOT (FLATPAKS)
+# 6. ENFIAR OS ATALHOS NA ÁREA DE TRABALHO DE FÁBRICA (FLATPAKS)
 # ==========================================
 mkdir -p /usr/etc/profile.d/
 cat << 'EOF' > /usr/etc/profile.d/lumeos-firstboot.sh
 #!/bin/bash
 if [ ! -f ~/.config/lumeos-setup-done ]; then
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    
     flatpak install -y flathub com.google.Chrome
     flatpak install -y flathub com.google.EarthPro
     flatpak install -y flathub com.spotify.Client
     flatpak install -y flathub org.onlyoffice.desktopeditors
+    flatpak install -y flathub com.valvesoftware.Steam
+    flatpak install -y flathub net.lutris.Lutris
+    flatpak install -y flathub com.valvesoftware.Steam.Utility.mangoHUD
+    
+    mkdir -p ~/Desktop/
+    cp /var/lib/flatpak/exports/share/applications/com.google.Chrome.desktop ~/Desktop/ 2>/dev/null || true
+    cp /var/lib/flatpak/exports/share/applications/com.google.EarthPro.desktop ~/Desktop/ 2>/dev/null || true
+    cp /var/lib/flatpak/exports/share/applications/com.spotify.Client.desktop ~/Desktop/ 2>/dev/null || true
+    cp /var/lib/flatpak/exports/share/applications/org.onlyoffice.desktopeditors.desktop ~/Desktop/ 2>/dev/null || true
+    cp /var/lib/flatpak/exports/share/applications/com.valvesoftware.Steam.desktop ~/Desktop/ 2>/dev/null || true
+    cp /var/lib/flatpak/exports/share/applications/net.lutris.Lutris.desktop ~/Desktop/ 2>/dev/null || true
+    
+    chmod +x ~/Desktop/*.desktop 2>/dev/null || true
     touch ~/.config/lumeos-setup-done
 fi
 EOF
