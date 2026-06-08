@@ -8,7 +8,7 @@ cat << 'EOF' > /etc/os-release
 NAME="LumeOS"
 VERSION="26 (Aurora)"
 ID=lumeos
-ID_LIKE="bazzite fedora"
+ID_LIKE="fedora"
 VERSION_ID=26
 PRETTY_NAME="LumeOS Aurora"
 ANSI_COLOR="0;34"
@@ -26,15 +26,14 @@ mkdir -p /usr/share/wallpapers/LumeOS_Galeria/contents/images/
 mkdir -p /usr/share/plasma/look-and-feel/org.lumeos.aurora/contents/layouts/
 mkdir -p /usr/share/pixmaps/lumeos-logos/
 mkdir -p /usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/
-mkdir -p /etc/skel/Área\ de\ Trabalho/
+mkdir -p /etc/skel/Desktop/
 
 # ==========================================
 # 3. DOWNLOADS DOS LOGOS E WALLPAPERS DO SEU SERVIDOR
 # ==========================================
 BASE_URL="https://update.lumeos.com.br/images"
 
-# Baixando a Galeria Completa de Wallpapers (01 a 20)
-curl -fsSL "${BASE_URL}/wpp03.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/1920x1080.jpg # PADRÃO DE FÁBRICA
+curl -fsSL "${BASE_URL}/wpp03.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/1920x1080.jpg
 curl -fsSL "${BASE_URL}/wpp01.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp01.jpg
 curl -fsSL "${BASE_URL}/wpp02.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp02.jpg
 curl -fsSL "${BASE_URL}/wpp04.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp04.jpg
@@ -54,7 +53,6 @@ curl -fsSL "${BASE_URL}/wpp18.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/conte
 curl -fsSL "${BASE_URL}/wpp19.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp19.jpg
 curl -fsSL "${BASE_URL}/wpp20.jpg" -o /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp20.jpg
 
-# Múltiplos Logos nos seus devidos caminhos
 curl -fsSL "${BASE_URL}/Logo01.png" -o /usr/share/plasma/look-and-feel/org.lumeos.aurora/contents/preview.png
 curl -fsSL "${BASE_URL}/icn01.png" -o /usr/share/pixmaps/lumeos-logos/logo_menu.png
 curl -fsSL "${BASE_URL}/icn02.png" -o /usr/share/pixmaps/lumeos-logos/logo_boot.png
@@ -95,9 +93,24 @@ touch /usr/share/plasma/look-and-feel/org.lumeos.aurora/contents/layouts/main.xm
 # ==========================================
 # 6. ENFIAR OS ATALHOS NA ÁREA DE TRABALHO DE FÁBRICA
 # ==========================================
-cp /usr/share/applications/google-chrome.desktop /etc/skel/Área\ de\ Trabalho/ 2>/dev/null || true
-cp /usr/share/applications/google-earth-pro.desktop /etc/skel/Área\ de\ Trabalho/ 2>/dev/null || true
-cp /usr/share/applications/spotify.desktop /etc/skel/Área\ de\ Trabalho/ 2>/dev/null || true
-cp /usr/share/applications/onlyoffice-desktopeditors.desktop /etc/skel/Área\ de\ Trabalho/ 2>/dev/null || true
+cp /var/lib/flatpak/exports/share/applications/com.google.Chrome.desktop /etc/skel/Desktop/ 2>/dev/null || true
+cp /var/lib/flatpak/exports/share/applications/com.google.EarthPro.desktop /etc/skel/Desktop/ 2>/dev/null || true
+cp /var/lib/flatpak/exports/share/applications/com.spotify.Client.desktop /etc/skel/Desktop/ 2>/dev/null || true
+cp /var/lib/flatpak/exports/share/applications/org.onlyoffice.desktopeditors.desktop /etc/skel/Desktop/ 2>/dev/null || true
 
-chmod +x /etc/skel/Área\ de\ Trabalho/*.desktop 2>/dev/null || true
+# ==========================================
+# 7. SCRIPT DE AUTOMAÇÃO DE PRIMEIRO BOOT (FLATPAKS)
+# ==========================================
+mkdir -p /usr/etc/profile.d/
+cat << 'EOF' > /usr/etc/profile.d/lumeos-firstboot.sh
+#!/bin/bash
+if [ ! -f ~/.config/lumeos-setup-done ]; then
+    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    flatpak install -y flathub com.google.Chrome
+    flatpak install -y flathub com.google.EarthPro
+    flatpak install -y flathub com.spotify.Client
+    flatpak install -y flathub org.onlyoffice.desktopeditors
+    touch ~/.config/lumeos-setup-done
+fi
+EOF
+chmod +x /usr/etc/profile.d/lumeos-firstboot.sh
