@@ -30,7 +30,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      # 🪄 TRUQUE MÁGICO REVISADO: Gera chaves sem senha usando o COSIGN_PASSWORD em branco
+      # 🪄 TRUQUE MÁGICO CORRIGIDO: Salvando bloco multi-linhas no GitHub do jeito certo
       - name: Gerar Chaves do Cosign na Marra
         env:
           COSIGN_PASSWORD: ""
@@ -38,10 +38,11 @@ jobs:
           curl -Lo cosign https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64
           chmod +x cosign
           ./cosign generate-key-pair
-          # Joga a chave privada gerada para dentro do ambiente que a action espera
-          echo "SIGNING_SECRET_AUTO=$(cat cosign.key)" >> $GITHUB_ENV
-          # Substitui o cosign.pub do repositório pelo gerado agora
-          cp cosign.pub ./cosign.pub
+          
+          # Sintaxe oficial do GitHub para aceitar textos de várias linhas sem quebrar
+          echo "SIGNING_SECRET_AUTO<<EOF" >> $GITHUB_ENV
+          cat cosign.key >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Build Custom Image
         uses: blue-build/github-action@v1.11
@@ -51,5 +52,5 @@ jobs:
           pr_event_number: ${{ github.event.number }}
           maximize_build_space: true
           
-          # Puxa a chave perfeita gerada localmente na nuvem
+          # Injeta a variável multi-linha limpinha
           cosign_private_key: ${{ env.SIGNING_SECRET_AUTO }}
