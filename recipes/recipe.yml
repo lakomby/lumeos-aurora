@@ -2,8 +2,10 @@
 name: lumeos-aurora
 description: LumeOS Aurora
 
-base-image: ghcr.io/ublue-os/bazzite-kde
-image-version: "41"
+# O novo repositório unificado deles
+base-image: ghcr.io/ublue-os/bazzite
+# A tag agora carrega a interface (kde) e a versão estável do Fedora (41)
+image-version: kde-41
 
 modules:
   - type: files
