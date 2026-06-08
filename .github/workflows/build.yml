@@ -35,5 +35,5 @@ jobs:
           pr_event_number: ${{ github.event.number }}
           maximize_build_space: true
 
-          # 🔑 O XEQUE-MATE: Passa o argumento direto pro container do BlueBuild ignorar a assinatura
-          cli_args: "--no-sign"
+          # 🔨 AGORA SIM: O nome exato aceito por essa versão da Action para engolir as flags
+          cli_arguments: "--no-sign"
