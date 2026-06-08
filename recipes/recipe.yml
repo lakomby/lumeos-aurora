@@ -14,7 +14,7 @@ modules:
       - source: system
         destination: /
 
-  # Gerenciador correto do Bazzite para instalar os apps e tirar a carniça do kfind
+  # Gerenciador do Bazzite para pacotes e remoção do kfind
   - type: rpm-ostree
     install:
       - google-chrome-stable
@@ -27,10 +27,7 @@ modules:
     remove:
       - kfind
 
-  # Aqui chamamos o nosso script de customização de logos e nomes
+  # Nosso script de customização
   - type: script
     scripts:
       - customizar_lumeos.sh
-
-  # Mantém esse cara! Ele é vital para gerar as chaves de segurança da ISO
-  - type: signing
