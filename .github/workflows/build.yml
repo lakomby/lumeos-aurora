@@ -30,28 +30,30 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      # 🔐 CONFIGURAÇÃO DEFINITIVA: Escreve o par casado perfeito direto no servidor
+      # 🔐 AGORA VAI: Injeta o par oficial gerado pelo algoritmo do Cosign
       - name: Configurar Chaves Emparelhadas
         run: |
-          # Garante a remoção de qualquer resquício anterior
           rm -f cosign.pub cosign.key
           
-          # 1. Cria a chave pública perfeita na raiz do build
+          # 1. Cria a chave pública legítima na raiz do build
           cat << 'EOF' > cosign.pub
 -----BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEpSXplDLA8haKGbk5QQBujuFmYoMK
-wbQ9pjLwS91Ny00nmh51xOQ+9O7I/I5NqXA45SbJZYpqyC9XU+Ejo7R1kA==
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEx0FdNiS2l1kgcRopeEsq8VRgYvtT
+Bk1YQkM67TXxOXwj9u2QWmm/2AQYjgfmuC4CnmMCFLTdeQU7rkeF9S/9yg==
 -----END PUBLIC KEY-----
 EOF
 
-          # 2. Injeta a chave privada correspondente exata no ambiente
+          # 2. Injeta a chave privada correspondente exata no formato COSIGN
           echo "SIGNING_SECRET_AUTO<<EOF" >> $GITHUB_ENV
           cat << 'EOF' >> $GITHUB_ENV
------BEGIN PRIVATE KEY-----
-MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgA7hn5qtKoh4wzpnY
-m0WzOZr7JWwnCVnEGC/zfbv2DGehRANCAASlJemUMsDyFooZuTlBAG6O4WZigwrB
-tD2mMvBL3U3LTSeaHnXE5D707sj8jk2pcDjlJsllimrIL1dT4SOjtHWQ
------END PRIVATE KEY-----
+-----BEGIN COSIGN PRIVATE KEY-----
+eyJrZXlEYXRhIjogeyJieXRlcyI6ICJNSUdIQWdFQU1CTUdCeXFHU000OUFnRUdD
+Q3FHU000OUF3RUhCRzB3YXdJQkFRUWc1M25iU2J3T0lIdlNmR3QxRU9rem9BR3lK
+UWJwUG4vWVpTdVRDTnl2RWwyaFJBTkNBQVRIUVYwMkpMYVhXU0J4R2lsNFN5cnhW
+R0JpKzFNR1RWaENRenJ0TmZFNWZDUDI3WkJhYWIvWUJCaU9CK2E0TGdLZVl3SVV0
+TjE1QlR1dVI0WDFMLzNLIiwgImFsZyI6ICJlY2RzYSJ9LCAicGFzc3dvcmQiOiBu
+dWxsfQ==
+-----END COSIGN PRIVATE KEY-----
 EOF
 
       - name: Build Custom Image
@@ -62,5 +64,5 @@ EOF
           pr_event_number: ${{ github.event.number }}
           maximize_build_space: true
           
-          # Passa a chave privada que casa 100% com o arquivo criado acima
+          # Passa a chave privada que casa 100% com o arquivo público acima
           cosign_private_key: ${{ env.SIGNING_SECRET_AUTO }}
