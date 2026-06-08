@@ -3,8 +3,7 @@ name: lumeos-aurora
 description: LumeOS Aurora
 
 base-image: ghcr.io/ublue-os/bazzite-kde
-# 🎯 A MUDANÇA ESSENCIAL: Troca 'latest' por 'stable'
-image-version: stable
+image-version: "41"
 
 modules:
   - type: files
@@ -12,7 +11,6 @@ modules:
       - source: system
         destination: /
 
-  # Gerenciador do Bazzite para pacotes e remoção do kfind
   - type: rpm-ostree
     install:
       - google-chrome-stable
@@ -24,8 +22,8 @@ modules:
       - papirus-icon-theme
     remove:
       - kfind
+      - libreoffice-core
 
-  # Nosso script de customização
   - type: script
     scripts:
       - customizar_lumeos.sh
