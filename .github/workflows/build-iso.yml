@@ -51,7 +51,7 @@ jobs:
             localhost/lumeos-iso-target:latest
 
       - name: Upload da ISO para o GitHub
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: LumeOS-Aurora-ISO
           path: output/
