@@ -1,11 +1,16 @@
-- name: Checkout do código
+name: Build LumeOS ISO
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-iso:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
         uses: actions/checkout@v4
 
-      # Esta linha garante que o Dockerfile.iso junta o teu script e a pasta doc local
-      - name: Build da imagem corrigida com os assets locais
-        run: podman build -t localhost/lumeos-iso-target -f Dockerfile.iso .
-
-      - name: Gerar ISO
+      - name: Gerar ISO Oficial LumeOS
         run: |
           mkdir -p output
           sudo podman run --rm --privileged \
@@ -13,5 +18,11 @@
             -v /var/lib/containers/storage:/var/lib/containers/storage \
             quay.io/centos-bootc/bootc-image-builder:latest \
             --type iso \
-            --local \
-            localhost/lumeos-iso-target
+            --chroot-commands "sed -i 's/^ID=.*/ID=fedora/' /etc/os-release && sed -i 's/^ID_LIKE=.*/ID_LIKE=\"fedora\"/' /etc/os-release" \
+            ghcr.io/lakomby/lumeos-aurora:latest
+
+      - name: Upload da ISO
+        uses: actions/upload-artifact@v4
+        with:
+          name: LumeOS-Aurora-ISO
+          path: output/bootiso/install.iso
