@@ -16,11 +16,12 @@ jobs:
       - name: Login no GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | sudo podman login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Criar imagem wrapper com ID=fedora e LABEL bootc
+      - name: Criar imagem wrapper com ID=fedora, VERSION_ID=41 e LABEL bootc
         run: |
           cat << 'EOF' > Dockerfile.iso
           FROM ghcr.io/lakomby/lumeos-aurora:latest
           RUN sed -i 's/^ID=.*/ID=fedora/' /etc/os-release && \
+              sed -i 's/^VERSION_ID=.*/VERSION_ID=41/' /etc/os-release && \
               grep -q '^ID_LIKE=' /etc/os-release \
                 && sed -i 's/^ID_LIKE=.*/ID_LIKE="fedora"/' /etc/os-release \
                 || echo 'ID_LIKE="fedora"' >> /etc/os-release
