@@ -10,15 +10,25 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
 
+      - name: Criar arquivo de configuração para forçar Fedora
+        run: |
+          mkdir -p config
+          cat << 'EOF' > config/blueprint.toml
+          [customizations.os]
+          # Força o builder a tratar a imagem como Fedora internamente
+          id = "fedora"
+          EOF
+
       - name: Gerar ISO Oficial LumeOS
         run: |
           mkdir -p output
           sudo podman run --rm --privileged \
             -v $(pwd)/output:/output \
+            -v $(pwd)/config:/config:ro \
             -v /var/lib/containers/storage:/var/lib/containers/storage \
             quay.io/centos-bootc/bootc-image-builder:latest \
             --type iso \
-            --chroot-commands "sed -i 's/^ID=.*/ID=fedora/' /etc/os-release && sed -i 's/^ID_LIKE=.*/ID_LIKE=\"fedora\"/' /etc/os-release" \
+            --blueprint /config/blueprint.toml \
             ghcr.io/lakomby/lumeos-aurora:latest
 
       - name: Upload da ISO
