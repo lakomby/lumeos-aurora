@@ -1,5 +1,17 @@
+Dockerfile
 FROM ghcr.io/lakomby/lumeos-aurora:latest
+
+# 1. Copia a pasta 'doc' inteira e o seu script para dentro do container
+COPY doc/ /tmp/doc/
+COPY customizar_lumeos.sh /tmp/customizar_lumeos.sh
+
+# 2. Executa o seu script de customização
+RUN chmod +x /tmp/customizar_lumeos.sh && \
+    /tmp/customizar_lumeos.sh
+
+# 3. Força temporariamente o ID=fedora para o gerador de ISO aceitar a imagem
 RUN sed -i 's/^ID=.*/ID=fedora/' /etc/os-release && \
-    grep -q '^ID_LIKE=' /etc/os-release \
-      && sed -i 's/^ID_LIKE=.*/ID_LIKE="fedora"/' /etc/os-release \
-      || echo 'ID_LIKE="fedora"' >> /etc/os-release
+    sed -i 's/^ID_LIKE=.*/ID_LIKE="fedora"/' /etc/os-release
+
+# 4. Limpa os arquivos temporários usados no build
+RUN rm -rf /tmp/doc /tmp/customizar_lumeos.sh
