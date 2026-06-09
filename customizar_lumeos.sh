@@ -28,38 +28,36 @@ mkdir -p /usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/
 mkdir -p /etc/skel/Desktop/
 
 # ==========================================
-# 3. DOWNLOADS DOS LOGOS E WALLPAPERS
+# 3. COPIAR OS LOGOS E WALLPAPERS LOCAIS (SEM INTERNET)
 # ==========================================
-BASE_URL="https://update.lumeos.com.br/images"
+# Pega direto os arquivos que o Dockerfile enviou para /tmp/doc/
 
-baixar_arquivo() {
-    curl -fsSL "$1" -o "$2" || echo "Aviso: Nao foi possivel baixar $1"
-}
+# Copia da galeria de wallpapers
+cp /tmp/doc/wpp03.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/1920x1080.jpg
+cp /tmp/doc/wpp01.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp01.jpg
+cp /tmp/doc/wpp02.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp02.jpg
+cp /tmp/doc/wpp04.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp04.jpg
+cp /tmp/doc/wpp05.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp05.jpg
+cp /tmp/doc/wpp06.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp06.jpg
+cp /tmp/doc/wpp07.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp07.jpg
+cp /tmp/doc/wpp08.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp08.jpg
+cp /tmp/doc/wpp09.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp09.jpg
+cp /tmp/doc/wpp10.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp10.jpg
+cp /tmp/doc/wpp11.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp11.jpg
+cp /tmp/doc/wpp12.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp12.jpg
+cp /tmp/doc/wpp13.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp13.jpg
+cp /tmp/doc/wpp14.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp14.jpg
+cp /tmp/doc/wpp15.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp15.jpg
+cp /tmp/doc/wpp17.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp17.jpg
+cp /tmp/doc/wpp18.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp18.jpg
+cp /tmp/doc/wpp19.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp19.jpg
+cp /tmp/doc/wpp20.jpg /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp20.jpg
 
-baixar_arquivo "${BASE_URL}/wpp03.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/1920x1080.jpg
-baixar_arquivo "${BASE_URL}/wpp01.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp01.jpg
-baixar_arquivo "${BASE_URL}/wpp02.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp02.jpg
-baixar_arquivo "${BASE_URL}/wpp04.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp04.jpg
-baixar_arquivo "${BASE_URL}/wpp05.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp05.jpg
-baixar_arquivo "${BASE_URL}/wpp06.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp06.jpg
-baixar_arquivo "${BASE_URL}/wpp07.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp07.jpg
-baixar_arquivo "${BASE_URL}/wpp08.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp08.jpg
-baixar_arquivo "${BASE_URL}/wpp09.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp09.jpg
-baixar_arquivo "${BASE_URL}/wpp10.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp10.jpg
-baixar_arquivo "${BASE_URL}/wpp11.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp11.jpg
-baixar_arquivo "${BASE_URL}/wpp12.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp12.jpg
-baixar_arquivo "${BASE_URL}/wpp13.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp13.jpg
-baixar_arquivo "${BASE_URL}/wpp14.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp14.jpg
-baixar_arquivo "${BASE_URL}/wpp15.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp15.jpg
-baixar_arquivo "${BASE_URL}/wpp17.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp17.jpg
-baixar_arquivo "${BASE_URL}/wpp18.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp18.jpg
-baixar_arquivo "${BASE_URL}/wpp19.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp19.jpg
-baixar_arquivo "${BASE_URL}/wpp20.jpg" /usr/share/wallpapers/LumeOS_Galeria/contents/images/wpp20.jpg
-
-baixar_arquivo "${BASE_URL}/Logo01.png" /usr/share/plasma/look-and-feel/org.lumeos.aurora/contents/preview.png
-baixar_arquivo "${BASE_URL}/icn01.png" /usr/share/pixmaps/lumeos-logos/logo_menu.png
-baixar_arquivo "${BASE_URL}/icn02.png" /usr/share/pixmaps/lumeos-logos/logo_boot.png
-baixar_arquivo "${BASE_URL}/lg02.png"  /usr/share/pixmaps/lumeos-logos/logo_sistema.png
+# Copia dos logos e identidades visuais
+cp /tmp/doc/Logo01.png /usr/share/plasma/look-and-feel/org.lumeos.aurora/contents/preview.png
+cp /tmp/doc/icn01.png /usr/share/pixmaps/lumeos-logos/logo_menu.png
+cp /tmp/doc/icn02.png /usr/share/pixmaps/lumeos-logos/logo_boot.png
+cp /tmp/doc/lg02.png  /usr/share/pixmaps/lumeos-logos/logo_sistema.png
 
 # ==========================================
 # 4. INJETAR O LOGO DO LUMEOS NO MENU INICIAR
