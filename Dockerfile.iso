@@ -1,0 +1,5 @@
+FROM ghcr.io/lakomby/lumeos-aurora:latest
+RUN sed -i 's/^ID=.*/ID=fedora/' /etc/os-release && \
+    grep -q '^ID_LIKE=' /etc/os-release \
+      && sed -i 's/^ID_LIKE=.*/ID_LIKE="fedora"/' /etc/os-release \
+      || echo 'ID_LIKE="fedora"' >> /etc/os-release
