@@ -5,34 +5,54 @@ on:
 
 jobs:
   build-iso:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: read
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Criar arquivo de configuração para forçar Fedora
+      - name: Login no GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | sudo podman login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Criar imagem wrapper com ID=fedora
         run: |
-          mkdir -p config
-          cat << 'EOF' > config/blueprint.toml
-          [customizations.os]
-          # Força o builder a tratar a imagem como Fedora internamente
-          id = "fedora"
+          cat << 'EOF' > Dockerfile.iso
+          FROM ghcr.io/lakomby/lumeos-aurora:latest
+          RUN sed -i 's/^ID=.*/ID=fedora/' /etc/os-release && \
+              grep -q '^ID_LIKE=' /etc/os-release \
+                && sed -i 's/^ID_LIKE=.*/ID_LIKE="fedora"/' /etc/os-release \
+                || echo 'ID_LIKE="fedora"' >> /etc/os-release
+          EOF
+          sudo podman build -t localhost/lumeos-iso-target:latest -f Dockerfile.iso .
+
+      - name: Criar config JSON para o builder
+        run: |
+          mkdir -p config output
+          cat << 'EOF' > config/config.json
+          {
+            "blueprint": {
+              "customizations": {}
+            }
+          }
           EOF
 
       - name: Gerar ISO Oficial LumeOS
         run: |
-          mkdir -p output
           sudo podman run --rm --privileged \
             -v $(pwd)/output:/output \
             -v $(pwd)/config:/config:ro \
             -v /var/lib/containers/storage:/var/lib/containers/storage \
             quay.io/centos-bootc/bootc-image-builder:latest \
             --type iso \
-            --blueprint /config/blueprint.toml \
-            ghcr.io/lakomby/lumeos-aurora:latest
+            --config /config/config.json \
+            --local \
+            localhost/lumeos-iso-target:latest
 
-      - name: Upload da ISO
+      - name: Upload da ISO para o GitHub
         uses: actions/upload-artifact@v4
         with:
           name: LumeOS-Aurora-ISO
-          path: output/bootiso/install.iso
+          path: output/
+          retention-days: 7
