@@ -1,19 +1,9 @@
-name: Build LumeOS ISO
-
-on:
-  workflow_dispatch:
-
-jobs:
-  build-iso:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout do código
+- name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Build da imagem wrapper (Patch de Distro)
-        run: podman build -t lumeos-iso-target -f Dockerfile.iso .
+      # Esta linha garante que o Dockerfile.iso junta o teu script e a pasta doc local
+      - name: Build da imagem corrigida com os assets locais
+        run: podman build -t localhost/lumeos-iso-target -f Dockerfile.iso .
 
       - name: Gerar ISO
         run: |
@@ -25,9 +15,3 @@ jobs:
             --type iso \
             --local \
             localhost/lumeos-iso-target
-
-      - name: Upload da ISO
-        uses: actions/upload-artifact@v4
-        with:
-          name: LumeOS-Aurora-ISO
-          path: output/bootiso/install.iso
