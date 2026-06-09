@@ -16,7 +16,7 @@ jobs:
       - name: Login no GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | sudo podman login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Criar imagem wrapper com ID=fedora
+      - name: Criar imagem wrapper com ID=fedora e LABEL bootc
         run: |
           cat << 'EOF' > Dockerfile.iso
           FROM ghcr.io/lakomby/lumeos-aurora:latest
@@ -24,6 +24,7 @@ jobs:
               grep -q '^ID_LIKE=' /etc/os-release \
                 && sed -i 's/^ID_LIKE=.*/ID_LIKE="fedora"/' /etc/os-release \
                 || echo 'ID_LIKE="fedora"' >> /etc/os-release
+          LABEL ostree.bootc=1
           EOF
           sudo podman build -t localhost/lumeos-iso-target:latest -f Dockerfile.iso .
 
@@ -46,8 +47,8 @@ jobs:
             -v /var/lib/containers/storage:/var/lib/containers/storage \
             quay.io/centos-bootc/bootc-image-builder:latest \
             --type iso \
+            --rootfs xfs \
             --config /config/config.json \
-            --local \
             localhost/lumeos-iso-target:latest
 
       - name: Upload da ISO para o GitHub
